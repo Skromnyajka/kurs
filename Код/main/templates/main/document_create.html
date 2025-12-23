@@ -1,0 +1,36 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-white">
+                <h4>Новый документ</h4>
+            </div>
+            <div class="card-body">
+                <!-- Добавили enctype для отправки файлов -->
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Тема документа</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Содержание</label>
+                        <textarea name="content" class="form-control" rows="5" required></textarea>
+                    </div>
+
+                    <!-- Поле для выбора файла -->
+                    <div class="mb-4 p-3 bg-light border rounded">
+                        <label class="form-label">Прикрепить скан или документ (Word/PDF)</label>
+                        <input type="file" name="file" class="form-control">
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Создать и загрузить</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

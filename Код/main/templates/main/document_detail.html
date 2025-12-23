@@ -1,0 +1,54 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4>{{ document.title }}</h4>
+        <div>
+            Статус:
+            {% if document.status == 'new' %}
+                <span class="badge bg-warning text-dark">На согласовании</span>
+            {% elif document.status == 'approved' %}
+                <span class="badge bg-success">Согласовано</span>
+            {% else %}
+                <span class="badge bg-danger">Отклонено</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card-body">
+        <p class="text-muted">
+            Автор: {{ document.author.username }} | Дата: {{ document.created_at }}
+        </p>
+
+        <!-- Блок скачивания файла -->
+        {% if document.file %}
+            <div class="alert alert-info d-flex align-items-center">
+                <span class="me-3">📎</span>
+                <div>
+                    <strong>К этому документу прикреплен файл:</strong><br>
+                    <a href="{{ document.file.url }}" class="btn btn-sm btn-primary mt-1" download>
+                        📥 Скачать документ
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        <hr>
+        <p class="fs-5">{{ document.content }}</p>
+
+        <hr>
+        <!-- Кнопки действий -->
+        {% if document.status == 'new' %}
+        <form method="post" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" name="action" value="approve" class="btn btn-success me-2">✔ Согласовать</button>
+            <button type="submit" name="action" value="reject" class="btn btn-danger">✖ Отклонить</button>
+        </form>
+        {% else %}
+            <div class="alert alert-light border">Документ уже обработан.</div>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="btn btn-link float-end">Вернуться назад</a>
+    </div>
+</div>
+{% endblock %}
